@@ -28,7 +28,8 @@
  * @copyright  metaVentis GmbH — http://metaventis.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class block_edusharing_workspace extends block_base {
+class block_edusharing_workspace extends block_base
+{
 
     /**
      * Initialize this block
@@ -42,8 +43,7 @@ class block_edusharing_workspace extends block_base {
                         <polygon fill="#C1C6E3" points="2.721,9.423 0,4.712 2.721,0 8.161,0 10.882,4.712 8.161,9.423 "/>
                     </svg>';
 
-        $this->title   = $eduIcon . ' ' . get_string('block_title', 'block_edusharing_workspace');
-        $this->version = 2015060901;
+        $this->title = $eduIcon . ' ' . get_string('block_title', 'block_edusharing_workspace');
     }
 
     /**
@@ -59,11 +59,11 @@ class block_edusharing_workspace extends block_base {
         global $CFG;
         global $COURSE;
 
-        $this->content = new stdClass;
-        $this->content->text = '<form action="'.$CFG->wwwroot.'/blocks/edusharing_workspace/helper/cc_workspace.php" method="get">
-                                <input type="hidden" name="sesskey" value="'.sesskey().'"/>
-                                <input type="hidden" name="id" value="'.$COURSE->id.'" /><input type="submit" class="btn btn-primary" value="'.
-                                htmlentities(get_string('button_text', 'block_edusharing_workspace')).'" /></form>';
+        $this->content       = new stdClass;
+        $this->content->text = '<form action="' . $CFG->wwwroot . '/blocks/edusharing_workspace/helper/cc_workspace.php" method="get">
+                                <input type="hidden" name="sesskey" value="' . sesskey() . '"/>
+                                <input type="hidden" name="id" value="' . $COURSE->id . '" /><input type="submit" class="btn btn-primary" value="' .
+            htmlentities(get_string('button_text', 'block_edusharing_workspace')) . '" /></form>';
 
         return $this->content;
     }

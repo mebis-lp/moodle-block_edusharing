@@ -24,10 +24,10 @@
 
 defined('MOODLE_INTERNAL') || die();
 $plugin->component = 'block_edusharing_workspace';
-$plugin->dependencies = array(
-    'mod_edusharing'  => 2018072701,
-);
-$plugin->version = 2021100501;
-$plugin->requires = 2015051100;
+$plugin->dependencies = [
+    'mod_edusharing'  => 2023111501,
+];
+$plugin->version = 2023111501;
+$plugin->requires = 2022041909;
 $plugin->maturity = MATURITY_STABLE;
-$plugin->release = 'v5.0';
+$plugin->release = 'v8.0';

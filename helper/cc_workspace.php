@@ -21,12 +21,15 @@
  */
 
 /**
- * Get workspave within iframe
+ * Get workspace within iframe
  *
  * @package    block_edusharing_workspace
  * @copyright  metaVentis GmbH — http://metaventis.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+use mod_edusharing\EduSharingService;
+use mod_edusharing\UtilityFunctions;
 
 require_once('../../../config.php');
 
@@ -35,58 +38,43 @@ global $CFG;
 global $PAGE;
 global $USER;
 global $SESSION;
+global $OUTPUT;
 
-require_once('../../../mod/edusharing/lib/cclib.php');
-require_once('../../../mod/edusharing/lib.php');
-
-require_sesskey();
-
-$id = optional_param('id', 0, PARAM_INT);
-// course id
-if (!$id) {
-    trigger_error(get_string('error_invalid_course_id', 'block_edusharing_workspace'), E_USER_WARNING);
+try {
+    require_sesskey();
+    // course id
+    $id = optional_param('id', 0, PARAM_INT);
+    if (!$id) {
+        trigger_error(get_string('error_invalid_course_id', 'block_edusharing_workspace'), E_USER_WARNING);
+        exit();
+    }
+    $PAGE->set_url('/blocks/edusharing_workspace/helper/cc_workspace.php', ['id' => $id]);
+    $course = $DB->get_record('course', ['id' => $id], '*', MUST_EXIST);
+    require_login($course->id);
+    echo $OUTPUT->header();
+    $service = new EduSharingService();
+    $ticket  = $service->getTicket();
+    $link    = trim(get_config('edusharing', 'application_cc_gui_url'), '/');
+    $link    .= '/?mode=1';
+    $utils   = new UtilityFunctions();
+    $user    = $utils->getAuthKey();
+    $link    .= '&user=' . urlencode($user);
+    $link    .= '&locale=' . current_language();
+    $link    .= '&ticket=' . urlencode($ticket);
+} catch (Exception $exception) {
+    error_log($exception->getMessage());
+    echo 'Error: ' . $exception->getMessage();
     exit();
 }
-
-$PAGE->set_url('/blocks/edusharing_workspace/helper/cc_workspace.php', array('id'  => $id));
-
-$course = $DB->get_record('course', array('id'  => $id));
-if (!$course) {
-    trigger_error(get_string('error_course_not_found', 'block_edusharing_workspace'), E_USER_WARNING);
-    exit();
-}
-
-require_login($course->id);
-
-echo $OUTPUT->header();
-
-$ccauth = new mod_edusharing_web_service_factory();
-$ticket = $ccauth->edusharing_authentication_get_ticket();
-if (!$ticket) {
-    exit();
-}
-
-$link = trim(get_config('edusharing', 'application_cc_gui_url'), '/');
-if(version_compare(get_config('edusharing', 'repository_version'), '4' ) >= 0) {
-    $link .= '/?locale=' . current_language();
-} else {
-    $link .= '/?mode=1';
-    $user = edusharing_get_auth_key();
-    $link .= '&user=' . urlencode($user);
-    $link .= '&locale=' . current_language();
-}
-
-$link .= '&ticket=' . urlencode($ticket);
-
-global $COURSE;
 
 // Open the external edu-sharingSearch page in iframe
 ?>
 
     <div id="esContent">
         <div class="esOuter">
-            <div id="closer"><a href="<?php echo $_SERVER['HTTP_REFERER'];?>">&times;</a></div>
-            <iframe id="childFrame" name="mainContent" src="<?php echo htmlentities($link);?>" width="100%" height="100%" scrolling="yes"
+            <div id="closer"><a href="<?php echo $_SERVER['HTTP_REFERER']; ?>">&times;</a></div>
+            <iframe id="childFrame" name="mainContent" src="<?php echo htmlentities($link); ?>" width="100%"
+                    height="100%" scrolling="yes"
                     marginwidth="0" marginheight="0" frameborder="0">
             </iframe>
         </div>
@@ -97,6 +85,5 @@ global $COURSE;
     </script>
 
 <?php
-// ------------------------------------------------------------------------------------
 
 exit();
