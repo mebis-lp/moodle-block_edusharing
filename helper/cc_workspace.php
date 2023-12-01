@@ -53,11 +53,11 @@ try {
     require_login($course->id);
     echo $OUTPUT->header();
     $service = new EduSharingService();
-    $ticket  = $service->getTicket();
+    $ticket  = $service->get_ticket();
     $link    = trim(get_config('edusharing', 'application_cc_gui_url'), '/');
     $link    .= '/?mode=1';
     $utils   = new UtilityFunctions();
-    $user    = $utils->getAuthKey();
+    $user    = $utils->get_auth_key();
     $link    .= '&user=' . urlencode($user);
     $link    .= '&locale=' . current_language();
     $link    .= '&ticket=' . urlencode($ticket);
