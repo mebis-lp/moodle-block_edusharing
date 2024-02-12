@@ -25,9 +25,9 @@
 defined('MOODLE_INTERNAL') || die();
 $plugin->component = 'block_edusharing_workspace';
 $plugin->dependencies = [
-    'mod_edusharing'  => 2023111700,
+    'mod_edusharing'  => 2024011400,
 ];
-$plugin->version = 2023111700;
+$plugin->version = 2024011400;
 $plugin->requires = 2022041909;
 $plugin->maturity = MATURITY_STABLE;
-$plugin->release = 'v8.0';
+$plugin->release = '8.0.1';

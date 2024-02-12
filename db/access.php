@@ -23,16 +23,18 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die();
+
 $capabilities = [
 
     'block/edusharing_workspace:myaddinstance' => [
         'captype'      => 'write',
         'contextlevel' => CONTEXT_SYSTEM,
         'archetypes'   => [
-            'user' => CAP_ALLOW
+            'user' => CAP_ALLOW,
         ],
 
-        'clonepermissionsfrom' => 'moodle/my:manageblocks'
+        'clonepermissionsfrom' => 'moodle/my:manageblocks',
     ],
     'block/edusharing_workspace:addinstance'   => [
         'riskbitmask'  => RISK_SPAM | RISK_XSS,
@@ -40,9 +42,9 @@ $capabilities = [
         'contextlevel' => CONTEXT_BLOCK,
         'archetypes'   => [
             'editingteacher' => CAP_ALLOW,
-            'manager'        => CAP_ALLOW
+            'manager'        => CAP_ALLOW,
         ],
 
-        'clonepermissionsfrom' => 'moodle/site:manageblocks'
+        'clonepermissionsfrom' => 'moodle/site:manageblocks',
     ],
 ];
