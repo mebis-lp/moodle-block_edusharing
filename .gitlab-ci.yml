@@ -1,0 +1,63 @@
+image: moodlehq/moodle-php-apache:8.2
+
+services:
+  - mysql:8.3.0
+  - name: selenium/standalone-chrome:4
+    alias: selenium-standalone-chrome
+
+variables:
+  DB: "mysqli"
+  MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+  TRAVIS_BUILD_DIR: "$CI_PROJECT_DIR"
+  MOODLE_BRANCH: "MOODLE_403_STABLE"
+  # Only needed, when your project is within a group/subgroup of "moodle".
+  MOODLE_DIR: "/var/www/html/moodle"
+  MOODLE_BEHAT_WDHOST: "http://selenium-standalone-chrome:4444/wd/hub"
+  MOODLE_START_BEHAT_SERVERS: "NO"
+  IGNORE_PATHS: "mod/edusharing/apiClient"
+
+test:
+
+  before_script:
+    # Update packages and install mysql-client.
+    - apt update && apt install -y default-mysql-client
+    #- mysql -h mysql -u root -e "show databases" | grep -v Database | grep -v mysql| grep -v information_schema| gawk '{print "drop database `" $1 "`;select sleep(0.1);"}'
+    # Install nvm and Node.js.
+    - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+    - . $HOME/.nvm/nvm.sh
+    - nvm install 21.6.2
+    # Install composer.
+    - curl -sS https://getcomposer.org/installer | php
+    - mv composer.phar /usr/local/bin/composer
+    # Setup Behat.
+    - export IPADDRESS=`grep "$HOSTNAME$" /etc/hosts | awk '{print $1}'`
+    - export MOODLE_BEHAT_WWWROOT="http://$IPADDRESS:8000"
+    # clean up in case of cached container
+    - rm -rf /builds/edu-sharing/community/integration/moodledata
+    - rm -rf /builds/edu-sharing/community/integration/moodle-plugin-ci-plugins
+    # Install Moodle CI plugin.
+    - cd $CI_PROJECT_DIR/.. && rm -rf ci
+    - composer create-project -n --no-dev --prefer-dist moodlehq/moodle-plugin-ci ci 4.4.0
+    - export PATH="$(cd ci/bin; pwd):$(cd ci/vendor/bin; pwd):$PATH"
+    - chmod u+x ci/bin/moodle-plugin-ci
+    - chmod u+x ci/bin/*
+    - umask u+x
+    # install main plugin
+    - moodle-plugin-ci add-plugin edu-sharing/plugin-moodle-edu-sharing
+    # Install Moodle (omit the --moodle argument if not needed)
+    - moodle-plugin-ci install --moodle=$MOODLE_DIR --db-host=mysql --no-init -vvv
+    - cd $MOODLE_DIR
+    # - php admin/tool/phpunit/cli/init.php
+    # Clone API client into mod_edusharing
+    - cd mod/edusharing/apiClient
+    - git clone https://github.com/edu-sharing/php-auth-plugin.git
+    - cp -a php-auth-plugin/src/. ./src
+
+  script:
+    - moodle-plugin-ci phplint
+    - moodle-plugin-ci codechecker
+    - moodle-plugin-ci validate
+    - moodle-plugin-ci savepoints
+    - moodle-plugin-ci mustache
+    - moodle-plugin-ci grunt
+    - moodle-plugin-ci phpdoc

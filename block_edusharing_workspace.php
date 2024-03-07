@@ -34,14 +34,14 @@ class block_edusharing_workspace extends block_base {
      * Initialize this block
      */
     public function init() {
-
+        // phpcs:disable -- Just messy svg
         $eduicon = '<svg  version="1.1" id="Layer_1" xmlns="&ns_svg;" xmlns:xlink="&ns_xlink;" width="19.938" height="19.771"
                          viewBox="0 0 19.938 19.771" overflow="visible" enable-background="new 0 0 19.938 19.771" xml:space="preserve">
                         <polygon fill="#3162A7" points="2.748,19.771 0.027,15.06 2.748,10.348 8.188,10.348 10.908,15.06 8.188,19.771 "/>
                         <polygon fill="#7F91C3" points="11.776,14.54 9.056,9.829 11.776,5.117 17.218,5.117 19.938,9.829 17.218,14.54 "/>
                         <polygon fill="#C1C6E3" points="2.721,9.423 0,4.712 2.721,0 8.161,0 10.882,4.712 8.161,9.423 "/>
                     </svg>';
-
+        // phpcs:enable
         $this->title = $eduicon . ' ' . get_string('block_title', 'block_edusharing_workspace');
     }
 
@@ -59,11 +59,12 @@ class block_edusharing_workspace extends block_base {
         global $COURSE;
 
         $this->content       = new stdClass;
+        // phpcs:disable -- Just messy html
         $this->content->text = '<form action="' . $CFG->wwwroot . '/blocks/edusharing_workspace/helper/cc_workspace.php" method="get">
                                 <input type="hidden" name="sesskey" value="' . sesskey() . '"/>
                                 <input type="hidden" name="id" value="' . $COURSE->id . '" /><input type="submit" class="btn btn-primary" value="' .
             htmlentities(get_string('button_text', 'block_edusharing_workspace'), ENT_COMPAT) . '" /></form>';
-
+        // phpcs:enable
         return $this->content;
     }
 }
