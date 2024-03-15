@@ -17,13 +17,13 @@
 /**
  * Defines the version of the edu-sharing plugin
  *
- * @package    block_edusharing_workspace
+ * @package    block_edusharing
  * @copyright  metaVentis GmbH — http://metaventis.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
-$plugin->component = 'block_edusharing_workspace';
+$plugin->component = 'block_edusharing';
 $plugin->dependencies = [
     'mod_edusharing'  => 2024011400,
 ];

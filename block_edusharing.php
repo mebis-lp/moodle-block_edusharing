@@ -17,7 +17,7 @@
 /**
  * Provide a block to link directly to an user's workspace on repository.
  *
- * @package    block_edusharing_workspace
+ * @package    block_edusharing
  * @copyright  metaVentis GmbH — http://metaventis.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -28,7 +28,7 @@
  * @copyright  metaVentis GmbH — http://metaventis.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class block_edusharing_workspace extends block_base {
+class block_edusharing extends block_base {
 
     /**
      * Initialize this block
@@ -42,7 +42,7 @@ class block_edusharing_workspace extends block_base {
                         <polygon fill="#C1C6E3" points="2.721,9.423 0,4.712 2.721,0 8.161,0 10.882,4.712 8.161,9.423 "/>
                     </svg>';
         // phpcs:enable
-        $this->title = $eduicon . ' ' . get_string('block_title', 'block_edusharing_workspace');
+        $this->title = $eduicon . ' ' . get_string('block_title', 'block_edusharing');
     }
 
     /**
@@ -63,7 +63,7 @@ class block_edusharing_workspace extends block_base {
         $this->content->text = '<form action="' . $CFG->wwwroot . '/blocks/edusharing_workspace/helper/cc_workspace.php" method="get">
                                 <input type="hidden" name="sesskey" value="' . sesskey() . '"/>
                                 <input type="hidden" name="id" value="' . $COURSE->id . '" /><input type="submit" class="btn btn-primary" value="' .
-            htmlentities(get_string('button_text', 'block_edusharing_workspace'), ENT_COMPAT) . '" /></form>';
+            htmlentities(get_string('button_text', 'block_edusharing'), ENT_COMPAT) . '" /></form>';
         // phpcs:enable
         return $this->content;
     }

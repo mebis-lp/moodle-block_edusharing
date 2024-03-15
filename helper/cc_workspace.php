@@ -23,7 +23,7 @@
 /**
  * Get workspace within iframe
  *
- * @package    block_edusharing_workspace
+ * @package    block_edusharing
  * @copyright  metaVentis GmbH — http://metaventis.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -45,7 +45,7 @@ try {
     // Course id.
     $id = optional_param('id', 0, PARAM_INT);
     if (!$id) {
-        trigger_error(get_string('error_invalid_course_id', 'block_edusharing_workspace'), E_USER_WARNING);
+        trigger_error(get_string('error_invalid_course_id', 'block_edusharing'), E_USER_WARNING);
         exit();
     }
     $PAGE->set_url('/blocks/edusharing_workspace/helper/cc_workspace.php', ['id' => $id]);

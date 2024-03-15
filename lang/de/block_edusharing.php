@@ -17,7 +17,7 @@
 /**
  * de language file
  *
- * @package    block_edusharing_workspace
+ * @package    block_edusharing
  * @copyright  metaVentis GmbH — http://metaventis.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
